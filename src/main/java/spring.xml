@@ -10,4 +10,19 @@
     <context:annotation-config />
 
     <context:component-scan base-package="com.learning.springdao" />
+
+    <!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+        <property name="url" value="jdbc:sqlserver://localhost:1433;databaseName=springDAO" />
+        <property name="username" value="sa" />
+        <property name="password" value="Ionuser@123" />
+    </bean> -->
+
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+        <property name="url" value="jdbc:sqlserver://localhost:1433;databaseName=springDAO" />
+        <property name="username" value="sa" />
+        <property name="password" value="Ionuser@123" />
+        <property name="initialSize" value="2" />
+    </bean>
 </beans> 

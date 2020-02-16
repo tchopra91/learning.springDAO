@@ -6,9 +6,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 import com.learning.springdao.model.Circle;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class JdbcDaoImpl {
+
+    @Autowired
+    private DataSource dataSource;
 
     public Circle getCircle(int circleId) {
 
@@ -16,12 +25,10 @@ public class JdbcDaoImpl {
         Connection conn = null;
 
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-            conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=springDAO", "sa", "Ionuser@123");
+            conn = this.dataSource.getConnection();
 
             PreparedStatement ps = conn.prepareStatement("select * from CIRCLE where id = ?");
-                    
+
             ps.setInt(1, circleId);
 
             ResultSet rs = ps.executeQuery();
@@ -45,5 +52,13 @@ public class JdbcDaoImpl {
         }
 
         return circle;
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

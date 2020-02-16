@@ -19,6 +19,9 @@ dependencies {
 	}
 
     compile "com.microsoft.sqlserver:mssql-jdbc"
+    compile "org.springframework:spring-jdbc"
+    compile "org.apache.commons:commons-dbcp2"
+    compile "org.apache.commons:commons-pool2"
 }
 
 test {
