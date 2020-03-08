@@ -20,6 +20,7 @@ public class DemoApplication {
         System.out.println("---> Name of circle with id '1' :: " + dao.getCircleName(1));
         System.out.println("---> JSON of circle witg id '1' :: " + dao.getCircleForId(1).toString());
 
+        dao.saveCircle(new Circle(2, "Test circle 2"));
         System.out.println("---> Get all circles :: " + dao.getAllCircles());
 
         context.close();
