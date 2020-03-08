@@ -25,4 +25,8 @@
         <property name="password" value="Ionuser@123" />
         <property name="initialSize" value="2" />
     </bean>
+
+    <bean id="namedParamjdbcDaoImpl" class="com.learning.springdao.dao.NamedParamJdbcDaoImpl">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
 </beans> 
