@@ -82,6 +82,25 @@ public class JdbcDaoImpl {
         return this.jdbcTemplate.queryForObject(sql, new Object[] { circleId }, String.class);
     }
 
+    public Circle getCircleForId(int circleId) {
+        String sql = "select * from CIRCLE where id = ?";
+        return this.jdbcTemplate.queryForObject(sql, new Object[] { circleId }, new CircleRowMapper());
+    }
+
+    public List<Circle> getAllCircles() {
+        String sql = "select * from CIRCLE";
+        return this.jdbcTemplate.query(sql, new CircleRowMapper());
+    }
+
+    private static final class CircleRowMapper implements RowMapper<Circle> {
+
+        @Override
+        public Circle mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new Circle(rs.getInt("id"), rs.getString("name"));
+        }
+
+    }
+
     public DataSource getDataSource() {
         return dataSource;
     }
