@@ -1,47 +1,65 @@
 package com.learning.springdao.dao;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 import com.learning.springdao.model.Circle;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JdbcDaoImpl {
 
-    @Autowired
     private DataSource dataSource;
+    private JdbcTemplate jdbcTemplate;
 
     public Circle getCircle(int circleId) {
-
         Circle circle = null;
         Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
             conn = this.dataSource.getConnection();
 
-            PreparedStatement ps = conn.prepareStatement("select * from CIRCLE where id = ?");
+            ps = conn.prepareStatement("select * from CIRCLE where id = ?");
 
             ps.setInt(1, circleId);
 
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 circle = new Circle(circleId, rs.getString("name"));
             }
 
-            rs.close();
-            ps.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
             if (conn != null) {
                 try {
                     conn.close();
@@ -54,11 +72,18 @@ public class JdbcDaoImpl {
         return circle;
     }
 
+    public int getCircleCount() {
+        String sql = "select count(*) from CIRCLE";
+        return this.jdbcTemplate.queryForObject(sql, Integer.class);
+    }
+
     public DataSource getDataSource() {
         return dataSource;
     }
 
+    @Autowired
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 }
