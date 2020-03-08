@@ -22,6 +22,8 @@ dependencies {
     compile "org.springframework:spring-jdbc"
     compile "org.apache.commons:commons-dbcp2"
     compile "org.apache.commons:commons-pool2"
+    compile "org.springframework:spring-orm"
+    compile "org.hibernate:hibernate-core"
 }
 
 test {
