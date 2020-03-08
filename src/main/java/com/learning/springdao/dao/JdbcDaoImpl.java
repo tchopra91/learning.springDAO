@@ -16,6 +16,9 @@ import com.learning.springdao.model.Circle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,6 +26,7 @@ public class JdbcDaoImpl {
 
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate namedParamJdbcTemplate;
 
     public Circle getCircle(int circleId) {
         Circle circle = null;
@@ -101,9 +105,17 @@ public class JdbcDaoImpl {
 
     }
 
+    // public void saveCircle(Circle circle) {
+    // String sql = "insert into CIRCLE(id, name) values(?, ?)";
+    // this.jdbcTemplate.update(sql, new Object[] { circle.getId(), circle.getName()
+    // });
+    // }
+
     public void saveCircle(Circle circle) {
-        String sql = "insert into CIRCLE(id, name) values(?, ?)";
-        this.jdbcTemplate.update(sql, new Object[] { circle.getId(), circle.getName() });
+        String sql = "insert into CIRCLE(id, name) values(:id, :name)";
+        SqlParameterSource namedParameterSource = new MapSqlParameterSource("id", circle.getId()).addValue("name",
+                circle.getName());
+        this.namedParamJdbcTemplate.update(sql, namedParameterSource);
     }
 
     public DataSource getDataSource() {
@@ -114,5 +126,6 @@ public class JdbcDaoImpl {
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.namedParamJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 }
