@@ -17,6 +17,7 @@ public class DemoApplication {
         Circle circle = dao.getCircle(1);
         System.out.println("---> " + circle.getName());
         System.out.println("---> Count :: " + dao.getCircleCount());
+        System.out.println("---> Name of circle with id '1' :: " + dao.getCircleName(1));
 
         context.close();
     }
